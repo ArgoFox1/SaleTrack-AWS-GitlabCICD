@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Günlük Rapor</title>
+</head>
+<body>
+    <h1>Günlük Satış Raporu</h1>
+    <table border="1">
+        <tr>
+            <th>Ürün</th>
+            <th>Miktar</th>
+            <th>Fiyat</th>
+            <th>Açıklama</th>
+            <th>Zaman</th>
+        </tr>
+        {% for sale in sales %}
+        <tr>
+            <td>{{ sale[1] }}</td>
+            <td>{{ sale[2] }}</td>
+            <td>{{ sale[3] }}</td>
+            <td>{{ sale[4] }}</td>
+            <td>{{ sale[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Toplam Gelir: {{ total_revenue }} TL</h2>
+    <a href="/">Geri Dön</a>
+</body>
+</html>
+
