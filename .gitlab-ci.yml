@@ -1,0 +1,52 @@
+stages:
+  - deploy
+
+deploy-job:
+  stage: deploy
+  script:
+    - mkdir -p ~/.ssh
+    - echo -e "$AWS_SECRET_ACCESS_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
+    - echo "StrictHostKeyChecking no" > ~/.ssh/config
+
+    - ssh -i ~/.ssh/id_rsa $AWS_USERNAME@$AWS_PUBLIC_IP "echo 'AWS EC2 Connection Successful'"
+
+    - ssh -i ~/.ssh/id_rsa $AWS_USERNAME@$AWS_PUBLIC_IP "
+        sudo mkdir -p /home/ec2-user/zeytin &&
+        sudo chown -R ec2-user:ec2-user /home/ec2-user/zeytin &&
+        cd /home/ec2-user/zeytin &&
+        if [ -d .git ]; then
+          echo ' Repo already exists. Pulling latest changes...' &&
+          git reset --hard origin/main &&  
+          git pull origin main;
+        else
+          echo 'Cloning the repo...' &&
+          git clone https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/ArgoFox1/AWS-CI-CD-Sales-Tracker.git .;
+        fi
+      "
+
+    - ssh -i ~/.ssh/id_rsa $AWS_USERNAME@$AWS_PUBLIC_IP "
+        docker login -u \"$CI_REGISTRY_USER\" -p \"$CI_REGISTRY_PASSWORD\" &&
+        cd /home/ec2-user/zeytin &&
+
+        echo 'Checking for running containers on port 5000...'
+
+        RUNNING_CONTAINERS=\$(docker ps -aq);
+        if [ ! -z \"\$RUNNING_CONTAINERS\" ]; then
+          echo 'Stopping and removing all running containers...' &&
+          docker stop \$RUNNING_CONTAINERS &&
+          docker rm -f \$RUNNING_CONTAINERS;
+        fi
+
+        OLD_IMAGES=\$(docker images -q);
+        if [ ! -z \"\$OLD_IMAGES\" ]; then
+          echo '🗑 Removing all old images...' &&
+          docker rmi -f \$OLD_IMAGES;
+        fi
+
+        echo 'Building new image...' &&
+        docker build -t $DOCKER_IMAGE_NAME . &&
+        echo 'Starting new container...' &&
+        docker run -d --name zeytin-container -p 5000:5000 $DOCKER_IMAGE_NAME
+      "
+
