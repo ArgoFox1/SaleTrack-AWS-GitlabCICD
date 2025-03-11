@@ -63,5 +63,5 @@ SaleTrack project automatically deployed on AWS EC2 instance using GitLab CI/CD 
 * In server footages
 ![Screenshot 2025-03-11 130229](https://github.com/user-attachments/assets/8ba6e4b5-dbe6-49b3-a14d-5fb036f52784)
 
-![Screenshot 2025-03-11 130256](https://github.com/user-attachments/assets/8f242eaa-0da0-47e5-b025-88fdc61dc638)
+![Screenshot 2025-03-11 130256](https://github.com/user-attachments/assets/18d0c490-4f7a-4356-addb-86b4ef74f3eb)
 
