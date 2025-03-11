@@ -8,21 +8,21 @@ SaleTrack project automatically deployed on AWS EC2 instance using GitLab CI/CD 
    ```shell
    aws ec2 create-security-group --group-name my-sg --description "My security group"
    ```
-* Make Acessable port 80
+* Allow Port 80 (HTTP)
   
    ```shell
    aws ec2 authorize-security-group-ingress \
     --group-id $SECURITY_GROUP_ID \
     --protocol tcp --port 80 --cidr 0.0.0.0/0
    ```
-* Make Acessable port 5000
+* Allow Port 5000 (FLASK)
   
    ```shell
    aws ec2 authorize-security-group-ingress \
     --group-id $SECURITY_GROUP_ID \
     --protocol tcp --port 5000 --cidr 0.0.0.0/0
    ```
-* Make Acessable port 22
+* Allow Port 22 (SSH)
   
    ```shell
    aws ec2 authorize-security-group-ingress \
@@ -51,5 +51,17 @@ SaleTrack project automatically deployed on AWS EC2 instance using GitLab CI/CD 
 
 * Creating github webhook for gitlab 
    ```shell
-   https://gitlab.com/api/v4/projects/(gitlab project id)/trigger/pipeline?token=      (gitlab runner token)&ref=main
+   https://gitlab.com/api/v4/projects/(gitlab project id)/trigger/pipeline?token=(gitlab runner token)&ref=main
    ```
+* Its must be look like this after entering payload url 
+![Screenshot 2025-03-11 125543](https://github.com/user-attachments/assets/eae20375-e5e8-4f31-b297-201e07fe1e6f)
+
+* After creating webhook its push every update you made in github repo to the gitlab ,  now you can access web server
+   ```shell
+   publicip:5000
+   ```
+* In server footages
+![Screenshot 2025-03-11 130229](https://github.com/user-attachments/assets/8ba6e4b5-dbe6-49b3-a14d-5fb036f52784)
+
+![Screenshot 2025-03-11 130256](https://github.com/user-attachments/assets/8f242eaa-0da0-47e5-b025-88fdc61dc638)
+
