@@ -47,3 +47,9 @@ SaleTrack project automatically deployed on AWS EC2 instance using GitLab CI/CD 
    ```shell
    ssh -i yourkeypair.pem ec2-user@ec2publicip
    ```
+![Screenshot 2025-03-08 130533](https://github.com/user-attachments/assets/4289fc03-cfb4-41ee-b860-5dd35aeaa3c1)
+
+* Creating github webhook for gitlab 
+   ```shell
+   https://gitlab.com/api/v4/projects/(gitlab project id)/trigger/pipeline?token=      (gitlab runner token)&ref=main
+   ```
